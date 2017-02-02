@@ -37,6 +37,9 @@ public function getStudentRecords()
 
 public function addStudentRecord($studentName,$id,$address,$year)
 {
+	//sanitize input
+	//$studentName = mysqli_real_escape_string($studentName);
+
 	$query = "insert into class(student,ID,address,year) VALUES ('$studentName','$id','$address',$year);";
 
 	echo "executing SQL statement:\n".$query."\n";
