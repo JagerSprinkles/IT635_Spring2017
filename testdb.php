@@ -2,42 +2,18 @@
 
 <?php
 
-$db = new mysqli("localhost" , "root" , "12345" , "classes");
+require_once("studentDB.inc");
 
-if($db->connect_errno != 0)
-{
-	echo "Error Connecting to Database" . $db->connect_error.PHP_EOL;
-	exit();
-
-}
+echo "executing script: ".$argv[0].PHP_EOL;
 
 
-echo "Connection Success!".PHP_EOL.PHP_EOL;
+$studentDB = new StudentAccess("classes");
 
-$query = "select * from class;";
+$students = $studentDB->getStudentRecords();
 
-$db->query($query);
-
-$queryResponse = $db->query($query);
-
-print_r($queryResponse);
-
-//var_dump($queryResponse);
-
-
-
-while($row = $queryResponse->fetch_assoc())
-{
-	print_r($row);
-}
-
-$db->close();
-
-
-echo "Program Complete".PHP_EOL;
-
-
-
+echo "student records in db are:".PHP_EOL;
+print_r($students);
+echo $argv[0]." complete".PHP_EOL;
 
 
 ?>
