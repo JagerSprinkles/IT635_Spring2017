@@ -1,0 +1,78 @@
+<html>
+<body>
+
+
+<div id="output">
+Tuedsay<p>
+</div>
+
+
+<div id="output2">
+Tuedsay2<p>
+</div>
+
+
+<div>
+<form onSubmit="return submitLogin();">
+username<p>
+<input type="text" id="username"><p>
+password<p>
+
+<input type="text" id="password"><p>
+<button type="submit"> Submit </button>
+
+</form>
+
+</div>
+
+
+
+
+
+<script type="text/javascript">
+
+
+function submitLogin(){
+	var uname = document.getElementById("username").value;
+	var pass = document.getElementById("password").value;
+	sendLoginRequest(uname,pass);
+	document.write( "<div>test</div>");
+
+	}
+
+
+
+	function sendLoginRequest(username,password){
+		var request = new XMLHttpRequest();
+		request.open("POST","auth.php",true);
+		request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+		request.onreadystatechange = function (){
+			if ((this.readyState == 4)&&(this.status == 200)){
+				document.getElementById("output").innerHTML = "Response Received<p>"
+				document.getElementById("output2").innerHTML = this.responseText+"<p>"
+
+			}
+		}
+
+		request.send("type=authenticate&username="+username+"&password="+password)
+
+	}
+
+
+
+
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
