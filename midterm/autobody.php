@@ -1,10 +1,8 @@
 #!/usr/bin/php
 
 <?php
-echo "Welcome to the Übertastic Auto Body Car and Part Tracker Thingy, or ÜABCPTT! \nType 'stop' by itself to exit at any time.\n\n";
+echo "Welcome to the Übertastic Auto Body Car and Part Tracker Thingy, or ÜABCPTT! \nPress CTRL+c to exit at any time.\n\n";
 
-
-$stop = false;
 
 $menu = 0;
 while ("Tuesday") {
@@ -13,7 +11,6 @@ while ("Tuesday") {
 			case '0': // first menu, login
 			echo "Type 'admin' to login to the admin account or press enter to login as the standard user\n\n";
 			$next = trim(fgets(STDIN));
-			if ($next == "stop") break;
 			if ($next == "admin") {
 				echo "Please enter admin password.\n";
 				$pass = hash('sha256', trim(fgets(STDIN)));
@@ -29,88 +26,107 @@ while ("Tuesday") {
 			break;
 			
 			case '1': //main menu
-			echo "in menu 1\n";
-			echo "Please type the number for the option you would like to choose\n1. Add vehicle to database.\n2. Check or update status of a vehicle.\n3. Schedule existing vehicle for repairs.\n4. Check stock levels on all parts.\n5. Order a part.\n6. Show the most ordered parts.\n\n";
+			echo "Please type the number for the option you would like to choose\n1. Add vehicle to database.\n2. Check or update status of a vehicle.\n3. Check stock levels on all parts.\n4. Order a part.\n5. Show the most ordered parts.\n\n";
 			$next = trim(fgets(STDIN));
-			if ($next == "stop") break;
 			switch ($next) {
-				case '1':
+				case '1': //Add vehicle to database
 				echo "Please enter the customer's first name.\n";
 				$fname = trim(fgets(STDIN));
-				if ($fname == "stop") break;
 				echo "Please enter the customer's last name.\n";
 				$lname = trim(fgets(STDIN));
-				if ($lname == "stop") break;
 				echo "Please enter the vehicle's make.\n";
 				$make = trim(fgets(STDIN));
-				if ($make == "stop") break;
 				echo "Please enter the vehicle's model.\n";
 				$model = trim(fgets(STDIN));
-				if ($model == "stop") break;
 				echo "Please enter the vehicle's year.\n";
 				$year = trim(fgets(STDIN));
-				if ($year == "stop") break;
 				echo "Please enter the vehicle's color.\n";
 				$color = trim(fgets(STDIN));
-				if ($color == "stop") break;
 				echo $fname.$lname.$make.$model.$year.$color."\n";
 					//insert into vehicle table here
 				break;
-				case '2':
+
+				case '2': //Check or update status of a vehicle
 				echo "Please enter the customer's last name to select their vehicle\n";
 				$lname = trim(fgets(STDIN));
-				if ($lname == "stop") break;
 					// get cur stat of vehicle here
-				echo "lastname's vehicle's status is currently XX.\nIf you would like to update the status please type update, otherwise press enter to return to the main menu\n";
+				echo "lastname's vehicle's status is currently XX.\nIf you would like to update the status please type 'update', otherwise press enter to return to the main menu\n\n";
 				$next = trim(fgets(STDIN));
-				if ($next == "stop") break;
 				if ($next == "update"){
-					echo "Please enter the new status of the vehicle:\n1. Needs estimate.\n2. Waiting for authorization to begin repairs.\n3. Waiting for parts\n4. Repairs underway!\n5. In paint shop\n6. In detail shop\n7. Ready for customer pickup.\n";
+					echo "Please enter the new status of the vehicle:\n1. Needs estimate.\n2. Waiting for authorization to begin repairs.\n3. Waiting for parts.\n4. Repairs underway!\n5. In paint shop.\n6. In detail shop.\n7. Ready for customer pickup.\n\n";
 					$next = trim(fgets(STDIN));
-					if ($next == "stop") break;
 					switch ($next) {
 						case '1':
-							echo "update 1";
-							break;
+						echo "update 1";
+						break;
 						case '2':
-							echo "update 2";
-							
-							break;
+						echo "update 2";
+						
+						break;
 						case '3':
-							echo "update 3";
-							
-							break;
+						echo "update 3";
+						
+						break;
 						case '4':
-							echo "update 4";
-							
-							break;
+						echo "update 4";
+						
+						break;
 						case '5':
-							echo "update 5";
-							
-							break;
+						echo "update 5";
+						
+						break;
 						case '6':
-							echo "update 6";
-							
-							break;
+						echo "update 6";
+						
+						break;
 						case '7':
-							echo "update 7";
-							
-							break;
+						echo "update 7";
+						
+						break;
 
 					}
 				}else break;
-
 				break;
-				case '3':
 
+				case '3': //Check stock levels on all parts
+				//print stock of all parts
 				break;
-				case '4':
 
-				break;
-				case '5':
+				case '4': //Order a part
+				echo "Please choose the part you would like to order:\n1. Front bumper.\n2. Rear bumper.\n3. Fender.\n4. Quarter panel.\n5. Hood.\n6. Front door.\n7. Rear door.\n8. Headlight.\n9. Taillight.\n\n";
+				$next = trim(fgets(STDIN));
+				switch ($next) {
+					case '1':
+					
+					break;
+					case '2':
+					
+					break;
+					case '3':
+					
+					break;
+					case '4':
+					
+					break;
+					case '5':
+					
+					break;
+					case '6':
+					
+					break;
+					case '7':
+					
+					break;
+					case '8':
+					
+					break;
+					case '9':
+					
+					break;
 
+				}
 				break;
-				case '6':
+				case '5': //Show the most ordered parts
 
 				break;
 
@@ -118,15 +134,14 @@ while ("Tuesday") {
 			break;
 
 			case '69':
-			echo "in menu 69\n";
+			echo "You can type SQL statements here and they will be sent to the database. Any output will be displayed here after the command runs.";
 			$next = trim(fgets(STDIN));
-			if ($next == "stop") break;
+
 			break;
 		}
 	  #$input .= $next_line;
 
 		echo "end loop\n" . $next . "\n";
-		if ($next == "stop") break;
 	}
 	?>
 
