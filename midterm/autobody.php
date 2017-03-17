@@ -5,10 +5,10 @@ require_once("bodyShopDB.inc");
 
 echo "Welcome to the Übertastic Auto Body Car and Part Tracker Thingy, or ÜABCPTT! \nPress CTRL+c to exit at any time.\n\n";
 
-
+$BSDB = new BodyShopAccess();
 $menu = 0;
 while ("Tuesday") {
-	echo "start loop menu = ".$menu."\n";
+	//echo "start loop menu = ".$menu."\n";
 	switch ($menu) {
 			case '0': // first menu, login
 			echo "Type 'admin' to login to the admin account or press enter to login as the standard user\n\n";
@@ -24,6 +24,7 @@ while ("Tuesday") {
 				}
 			} else {
 				$menu = 1;
+				system('clear');
 			}
 			break;
 			
@@ -51,7 +52,7 @@ while ("Tuesday") {
 				case '2': //Check or update status of a vehicle
 				echo "Please enter the customer's last name to select their vehicle\n";
 				$lname = trim(fgets(STDIN));// get cur stat of vehicle here
-				$BSDB = new BodyShopAccess("Classes");
+				//$BSDB = new BodyShopAccess();
 				$result = $BSDB->getVehicleStatus($lname);
 				if ($result['fname']){
 					echo "\n".$result['fname']." ".$result['lname']."'s vehicle's status is currently '".$result['status']."'.\nIf you would like to update the status please type 'update', otherwise press enter to return to the main menu\n\n"; 
@@ -125,8 +126,11 @@ while ("Tuesday") {
 				break;
 
 				case '3': //Check stock levels on all parts
-				//print stock of all parts
+
+				echo $BSDB->getPartStock()."\nPlease press enter to return to the main menu\n";
+				trim(fgets(STDIN));
 				break;
+
 
 				case '4': //Order a part
 				echo "Please choose the part you would like to order:\n1. Front bumper.\n2. Rear bumper.\n3. Fender.\n4. Quarter panel.\n5. Hood.\n6. Front door.\n7. Rear door.\n8. Headlight.\n9. Taillight.\n\n";
@@ -177,7 +181,7 @@ while ("Tuesday") {
 		}
 	  #$input .= $next_line;
 
-		echo "end loop\n" . $next . "\n";
+		//echo "end loop\n" . $next . "\n";
 	}
 	?>
 

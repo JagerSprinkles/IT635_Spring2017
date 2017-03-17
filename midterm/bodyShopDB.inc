@@ -26,16 +26,29 @@ public function getVehicleStatus($lname)
 {
 	$query = "select * from vehicles where `lname` = '".$lname."';";
 	$queryResponse = $this->db->query($query);
-	$response = $queryResponse->fetch_array(MYSQLI_ASSOC);
-	return $response;
+	return $queryResponse->fetch_array(MYSQLI_ASSOC);
 }
 
 public function setVehicleStatus($lname, $status)
 {
 	$query = "update vehicles set status = '".$status."' where lname = '".$lname."';";
-	echo "QQQ".$query."\n";
 	$queryResponse = $this->db->query($query);
 	return $queryResponse;
+}
+
+public function getPartStock()
+{
+	$query = "select part,stock from parts;";
+	$queryResponse = $this->db->query($query);
+	$response = "Here is the current stock of parts:\n";
+	while($row = $queryResponse->fetch_assoc())
+	{
+		$response .= str_pad($row['part'], 20) ."\t\t". $row['stock']."\n";
+		
+	}
+	return $response;
+
+
 }
 
 // public function addStudentRecord($studentName,$studentid,$studentaddress,$studentyear)
