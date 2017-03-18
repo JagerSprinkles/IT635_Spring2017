@@ -3,15 +3,46 @@
 <?php
 require_once("bodyShopDB.inc");
 system('clear');
-echo "Welcome to the Übertastic Auto Body Car and Part Tracker Thingy, or ÜABCPTT! \nPress CTRL+c to exit at any time.\n\n";
 
+
+$q = 113;
+$col = exec('tput cols');
+
+
+// if ($col < 120) $x = 150; else $x = $col;
+
+// for ($x; $x >= 0 ; $x--) { 
+	
+// 	$banner = substr("Welcome to the Übertastic Auto Body Car and Part Tracker Thingy, or ÜABCPTT! \nPress CTRL+c to exit at any time.\n\n", $q);
+// 	if ($q > 0) $q--;
+// 	$space = "";
+// 	for ($y = $col - $q; $y > 0 ; $y--) { 
+// 		$space .= " ";
+
+// 	}
+// 	system('clear');
+// 	if ($x < 37) $space = "";
+// 	echo $space.$banner;
+// 	usleep(25000);
+// }
+
+
+//system('clear');
+
+// $pad = "";
+// for ($i=0; $i < $col; $i++) { 
+// 	$pad .= "-=";
+// }
+//echo "Welcome to the Übertastic Auto Body Car and Part Tracker Thingy, or ÜABCPTT! \nPress CTRL+c to exit at any time.\n\n";
 $BSDB = new BodyShopAccess();
 $menu = 0;
 while ("Tuesday") {
+
 	//echo "start loop menu = ".$menu."\n";
 	switch ($menu) {
 		case '0': // first menu, login
-		echo "Type 'admin' to login to the admin account or press enter to login as the standard user\n\n";
+		
+		echo "Type 'admin' to login to the admin account or press enter to access the main menu.\n\n";
 		$next = trim(fgets(STDIN));
 		if ($next == "admin") {
 			echo "Please enter admin password.\n";
@@ -30,7 +61,7 @@ while ("Tuesday") {
 		
 		case '1': //main menu
 		system('clear');
-		echo "-----Main Menu-----\nPlease type the number for the option you would like to choose:\n1. Add vehicle to database.\n2. Check or update status of a vehicle.\n3. Check stock levels on all parts.\n4. Order a part.\n5. Show the most ordered parts.\n6. Exit.\n\n";
+		echo "-----Main Menu-----\nPlease type the number for the option you would like to choose:\n1. Get current vehicle list.\n2. Add vehicle to database.\n3. Check or update status of a vehicle.\n4. Check stock levels on all parts.\n5. Order a part.\n6. Show the most ordered parts.\n7. Exit.\n\n";
 		$next = trim(fgets(STDIN));
 		switch ($next) {
 			case '1': //Add vehicle to database
@@ -44,10 +75,17 @@ while ("Tuesday") {
 			$model = trim(fgets(STDIN));
 			echo "Please enter the vehicle's year.\n";
 			$year = trim(fgets(STDIN));
+			if (strlen($year) != 4) $year = 'THE GAME';
+			while (!is_numeric($year)) {
+			echo "That was not a valid year, please enter a four digit integer for the year.\n";
+			$year = trim(fgets(STDIN));
+			if (strlen($year) != 4) $year = 'THE GAME';
+			}
 			echo "Please enter the vehicle's color.\n";
 			$color = trim(fgets(STDIN));
-			echo $fname.$lname.$make.$model.$year.$color."\n";
-				//insert into vehicle table here
+			$BSDB->addVehicle($fname,$lname,$make,$model,$year,$color);
+			echo $fname." ".$lname."'s vehicle has been added to the database.\n"
+			trim(fgets(STDIN));
 			break;
 
 			case '2': //Check or update status of a vehicle
@@ -100,47 +138,54 @@ while ("Tuesday") {
 
 			case '3': //Check stock levels on all parts
 			system('clear');
-			echo $BSDB->getPartStock()."\nPlease press enter to return to the main menu.\n";
+			echo $BSDB->getPartStock(exec('tput cols'))."\nPlease press enter to return to the main menu.\n";
 			trim(fgets(STDIN));
 			break;
 
 
 			case '4': //Order a part
-			echo "Please choose the part you would like to order:\n1. Front bumper.\n2. Rear bumper.\n3. Fender.\n4. Quarter panel.\n5. Hood.\n6. Front door.\n7. Rear door.\n8. Headlight.\n9. Taillight.\n\n";
+			echo "Please choose the part you would like to order.\nInstant delivery is guaranteed!\n\n1. Front bumper.\n2. Rear bumper.\n3. Fender.\n4. Quarter panel.\n5. Hood.\n6. Front door.\n7. Rear door.\n8. Headlight.\n9. Taillight.\n\n";
 			$next = trim(fgets(STDIN));
+			$part = "";
 			switch ($next) {
 				case '1':
-				
+				$part = "Front Bumper";
 				break;
 				case '2':
-				
+				$part = "Rear Bumper";
 				break;
 				case '3':
-				
+				$part = "Fender";
 				break;
 				case '4':
-				
+				$part = "Quarter Panel";
 				break;
 				case '5':
-				
+				$part = "Hood";
 				break;
 				case '6':
-				
+				$part = "Front Door";
 				break;
 				case '7':
-				
+				$part = "Rear Door";
 				break;
 				case '8':
-				
+				$part = "Headlight";
 				break;
 				case '9':
-				
+				$part = "Taillight";
 				break;
-
 			}
+			echo "How many ".$part."s would you like to order?\n";
+			$amount = trim(fgets(STDIN));
+			$stock = $BSDB->orderPart($part,$amount);
+			echo "The new stock level of ".$part."s is ".$stock.".\n";
+			trim(fgets(STDIN));
+			
 			break;
 			case '5': //Show the most ordered parts
-
+			echo $BSDB->getMostOrdered(exec('tput cols'));
+			trim(fgets(STDIN));
 			break;
 			case '6':
 			goto OMGWHYONEARTHWOULDYOUUSEAGOTO;

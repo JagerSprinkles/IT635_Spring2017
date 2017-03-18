@@ -22,6 +22,12 @@ public function __destruct()
 	}
 }
 
+public function addVehicle($fname,$lname,$make,$model,$year,$color)
+{
+	$query = "insert into vehicles values (NULL,'".$fname."','".$lname."','".$make."','".$model."','".$year."','".$color."',DEFAULT);";
+	$queryResponse = $this->db->query($query);
+}
+
 public function getVehicleStatus($lname)
 {
 	$query = "select * from vehicles where `lname` = '".$lname."';";
@@ -36,20 +42,45 @@ public function setVehicleStatus($lname, $status)
 	return $queryResponse;
 }
 
-public function getPartStock()
+public function getPartStock($col)
 {
 	$query = "select part,stock from parts;";
 	$queryResponse = $this->db->query($query);
 	$response = "Here is the current stock of parts:\n";
-	while($row = $queryResponse->fetch_assoc())
-	{
-		$response .= str_pad($row['part'], 20) ."\t\t". $row['stock']."\n";
-		
-	}
+	while($row = $queryResponse->fetch_assoc()) $response .= str_pad($row['part']." ", $col - strlen($row['stock']) ) . $row['stock']."\n";
 	return $response;
-
-
 }
+
+public function orderPart($part, $amount)
+{
+
+	$query = "select * from parts where part = '".$part."';";
+	$queryResponse = $this->db->query($query);
+	$selectedPart = $queryResponse->fetch_array(MYSQLI_ASSOC);
+	$query = "update parts set stock = '".($selectedPart['stock']+$amount)."' where part = '".$part."';";
+	$queryResponse = $this->db->query($query);
+	$query = "update parts set times_ordered = '".($selectedPart['times_ordered']+$amount)."' where part = '".$part."';";
+	$queryResponse = $this->db->query($query);
+	$query = "select part,stock from parts where part = '".$part."';";
+	$queryResponse = $this->db->query($query);
+	$selectedPart = $queryResponse->fetch_array(MYSQLI_ASSOC);
+	return $selectedPart['stock'];
+}
+
+public function getMostOrdered($col)
+{
+	$query = "select part,times_ordered from parts;";
+	$queryResponse = $this->db->query($query);
+	//$response = "Here is the current stock of parts:\n";
+	$x = 0;
+	$list = array();
+	while($row = $queryResponse->fetch_assoc()) $list[$row['times_ordered']] = $row['part'];
+	krsort($list);
+	$out = "";
+	foreach ($list as $key => $val) $out .= str_pad($val."s have been orderd ", $col - strlen($key)-7).$key." times.\n";
+	return $out;
+}
+
 
 // public function addStudentRecord($studentName,$studentid,$studentaddress,$studentyear)
 // {
