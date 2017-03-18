@@ -22,6 +22,20 @@ public function __destruct()
 	}
 }
 
+public function getVehicles()
+{
+	$query = "select * from vehicles;";
+	$queryResponse = $this->db->query($query);
+	$response = "Here is the current list of vehicles\nThey are listed by fisrt name  |  last name  |  make  |  model  |  year  |  color.\n";
+	while($row = $queryResponse->fetch_assoc()){
+	
+	$response .= $row['fname']."  |  ".$row['lname']."  |  ".$row['make']."  |  ".$row['model']."  |  ".$row['year']."  |  ".$row['color']."\n";
+	
+	}
+	return $response;
+
+}
+
 public function addVehicle($fname,$lname,$make,$model,$year,$color)
 {
 	$query = "insert into vehicles values (NULL,'".$fname."','".$lname."','".$make."','".$model."','".$year."','".$color."',DEFAULT);";
@@ -77,7 +91,7 @@ public function getMostOrdered($col)
 	while($row = $queryResponse->fetch_assoc()) $list[$row['times_ordered']] = $row['part'];
 	krsort($list);
 	$out = "";
-	foreach ($list as $key => $val) $out .= str_pad($val."s have been orderd ", $col - strlen($key)-7).$key." times.\n";
+	foreach ($list as $key => $val) $out .= str_pad($val."s have been ordered ", $col - strlen($key)-7).$key." times\n";
 	return $out;
 }
 
