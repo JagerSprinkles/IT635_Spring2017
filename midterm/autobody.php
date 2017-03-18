@@ -9,41 +9,41 @@ $q = 113;
 $col = exec('tput cols');
 
 
-// if ($col < 120) $x = 150; else $x = $col;
+if ($col < 120) $x = 150; else $x = $col;
 
-// for ($x; $x >= 0 ; $x--) { 
+for ($x; $x >= 0 ; $x--) { 
 	
-// 	$banner = substr("Welcome to the Übertastic Auto Body Car and Part Tracker Thingy, or ÜABCPTT! \nPress CTRL+c to exit at any time.\n\n", $q);
-// 	if ($q > 0) $q--;
-// 	$space = "";
-// 	for ($y = $col - $q; $y > 0 ; $y--) { 
-// 		$space .= " ";
+	$banner = substr("Welcome to the Übertastic Auto Body Car and Part Tracker Thingy, or ÜABCPTT! \nPress CTRL+c to exit at any time.\n\n", $q);
+	if ($q > 0) $q--;
+	$space = "";
+	for ($y = $col - $q; $y > 0 ; $y--) { 
+		$space .= " ";
 
-// 	}
-// 	system('clear');
-// 	if ($x < 37) $space = "";
-// 	echo $space.$banner;
-// 	usleep(25000);
-// }
+	}
+	system('clear');
+	if ($x < 37) $space = "";
+	echo $space.$banner;
+	usleep(25000);
+}
 
 
-//system('clear');
+system('clear');
 
-// $pad = "";
-// for ($i=0; $i < $col; $i++) { 
-// 	$pad .= "-=";
-// }
-//echo "Welcome to the Übertastic Auto Body Car and Part Tracker Thingy, or ÜABCPTT! \nPress CTRL+c to exit at any time.\n\n";
+$pad = "";
+for ($i=0; $i < $col; $i++) { 
+	$pad .= "-=";
+}
+echo "Welcome to the Übertastic Auto Body Car and Part Tracker Thingy, or ÜABCPTT! \nPress CTRL+c to exit at any time.\n\n";
 $BSDB = new BodyShopAccess();
 $menu = 0;
 while ("Tuesday") {
 
-	//echo "start loop menu = ".$menu."\n";
 	switch ($menu) {
 		case '0': // first menu, login
 		
 		echo "Type 'admin' to login to the admin account or press enter to access the main menu.\n\n";
 		$next = trim(fgets(STDIN));
+		system('clear');
 		if ($next == "admin") {
 			echo "Please enter admin password.\n";
 			$pass = hash('sha256', trim(fgets(STDIN)));
@@ -71,8 +71,6 @@ while ("Tuesday") {
 			echo "\nPlease press enter to return to the main menu.\n";
 			trim(fgets(STDIN));
 			break;
-
-
 			case '2': //Add vehicle to database
 			system('clear');
 			echo "Please enter the customer's first name.\n";
@@ -103,7 +101,7 @@ while ("Tuesday") {
 			system('clear');
 			echo "Please enter the customer's last name to select their vehicle\n";
 			$lname = trim(fgets(STDIN));// get cur stat of vehicle here
-			//$BSDB = new BodyShopAccess();
+			
 			$result = $BSDB->getVehicleStatus($lname);
 			system('clear');
 			if ($result['fname']){
@@ -210,21 +208,20 @@ while ("Tuesday") {
 			trim(fgets(STDIN));
 			break;
 			case '7':
-			goto VELOCIRAPTOR_ATTACK; //https://xkcd.com/292/
+			goto VELOCIRAPTOR_ATTACK; //  https://xkcd.com/292/
 
 		}
 		break;
 
 		case '69':
 		system('clear');
-		echo "You can type SQL statements here and they will be sent to the database. Any output will be displayed here after the command runs.";
+		echo str_pad("Admin Menu", exec('tput cols'), "|", STR_PAD_BOTH);
+		echo "\nPlease type the number for the option you would like to choose:\n1. Remove vehicle from database.\n2. Update part stock.\n\n";
 		$next = trim(fgets(STDIN));
 
 		break;
 	}
-	  #$input .= $next_line;
 
-	//echo "end loop\n" . $next . "\n";
 }
 VELOCIRAPTOR_ATTACK:
 system('clear');

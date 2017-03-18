@@ -58,7 +58,7 @@ DROP TABLE IF EXISTS `parts`;
 CREATE TABLE `parts` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `part` varchar(255) DEFAULT NULL,
-  `stock` int(5) DEFAULT 0,
+  `stock` int(10) DEFAULT 0,
   `times_ordered` int(10) DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
