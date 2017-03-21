@@ -5,26 +5,26 @@ require_once("bodyShopDB.inc");
 system('clear');
 
 
-// $q = 113;
-// $col = exec('tput cols');
+$q = 113;
+$col = exec('tput cols');
 
 
-// if ($col < 120) $x = 150; else $x = $col;
+if ($col < 120) $x = 150; else $x = $col;
 
-// for ($x; $x >= 0 ; $x--) { 
+for ($x; $x >= 0 ; $x--) { 
 
-// 	$banner = substr("Welcome to the Übertastic Auto Body Car and Part Tracker Thingy, or ÜABCPTT! \nPress CTRL+c to exit at any time.\n\n", $q);
-// 	if ($q > 0) $q--;
-// 	$space = "";
-// 	for ($y = $col - $q; $y > 0 ; $y--) { 
-// 		$space .= " ";
+	$banner = substr("Welcome to the Übertastic Auto Body Car and Part Tracker Thingy, or ÜABCPTT! \nPress CTRL+c to exit at any time.\n\n", $q);
+	if ($q > 0) $q--;
+	$space = "";
+	for ($y = $col - $q; $y > 0 ; $y--) { 
+		$space .= " ";
 
-// 	}
-// 	system('clear');
-// 	if ($x < 37) $space = "";
-// 	echo $space.$banner;
-// 	usleep(25000);
-// }
+	}
+	system('clear');
+	if ($x < 37) $space = "";
+	echo $space.$banner;
+	usleep(25000);
+}
 
 
 system('clear');
@@ -33,7 +33,8 @@ $pad = "";
 for ($i=0; $i < exec('tput cols'); $i++) { 
 	$pad .= "-=";
 }
-echo "Welcome to the Übertastic Auto Body Car and Part Tracker Thingy, or ÜABCPTT! \nPress CTRL+c to exit at any time.\n\n";
+echo "Welcome to the Übertastic Auto Body Car and Part Tracker Thingy, or ÜABCPTT! \nPress CTRL+c to exit at any time.\nPlease press enter to get started!\n\n";
+trim(fgets(STDIN));
 $BSDB = new BodyShopAccess();
 $menu = 1;
 while ("Tuesday") {
@@ -45,8 +46,8 @@ while ("Tuesday") {
 		// $next = trim(fgets(STDIN));
 		system('clear');
 		// if ($next == "admin") {
-			echo "Please enter admin password.\n";
-			$pass = hash('sha256', trim(fgets(STDIN)));
+		echo "Please enter admin password.\n";
+		$pass = hash('sha256', trim(fgets(STDIN)));
 			if ($pass == "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8"){  //password
 				echo "Admin login successful!\n";
 				$menu = 69;
@@ -60,8 +61,8 @@ while ("Tuesday") {
 		// 	$menu = 1;
 
 		// }
-		break;
-		
+			break;
+
 		case '1': //main menu
 		system('clear');
 		echo str_pad("Main Menu", exec('tput cols'), "=", STR_PAD_BOTH);
