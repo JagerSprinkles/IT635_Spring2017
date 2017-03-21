@@ -5,69 +5,72 @@ require_once("bodyShopDB.inc");
 system('clear');
 
 
-$q = 113;
-$col = exec('tput cols');
+// $q = 113;
+// $col = exec('tput cols');
 
 
-if ($col < 120) $x = 150; else $x = $col;
+// if ($col < 120) $x = 150; else $x = $col;
 
-for ($x; $x >= 0 ; $x--) { 
-	
-	$banner = substr("Welcome to the Übertastic Auto Body Car and Part Tracker Thingy, or ÜABCPTT! \nPress CTRL+c to exit at any time.\n\n", $q);
-	if ($q > 0) $q--;
-	$space = "";
-	for ($y = $col - $q; $y > 0 ; $y--) { 
-		$space .= " ";
+// for ($x; $x >= 0 ; $x--) { 
 
-	}
-	system('clear');
-	if ($x < 37) $space = "";
-	echo $space.$banner;
-	usleep(25000);
-}
+// 	$banner = substr("Welcome to the Übertastic Auto Body Car and Part Tracker Thingy, or ÜABCPTT! \nPress CTRL+c to exit at any time.\n\n", $q);
+// 	if ($q > 0) $q--;
+// 	$space = "";
+// 	for ($y = $col - $q; $y > 0 ; $y--) { 
+// 		$space .= " ";
+
+// 	}
+// 	system('clear');
+// 	if ($x < 37) $space = "";
+// 	echo $space.$banner;
+// 	usleep(25000);
+// }
 
 
 system('clear');
 
 $pad = "";
-for ($i=0; $i < $col; $i++) { 
+for ($i=0; $i < exec('tput cols'); $i++) { 
 	$pad .= "-=";
 }
 echo "Welcome to the Übertastic Auto Body Car and Part Tracker Thingy, or ÜABCPTT! \nPress CTRL+c to exit at any time.\n\n";
 $BSDB = new BodyShopAccess();
-$menu = 0;
+$menu = 1;
 while ("Tuesday") {
 
 	switch ($menu) {
 		case '0': // first menu, login
 		
-		echo "Type 'admin' to login to the admin account or press enter to access the main menu.\n\n";
-		$next = trim(fgets(STDIN));
+		// echo "Type 'admin' to login to the admin account or press enter to access the main menu.\n\n";
+		// $next = trim(fgets(STDIN));
 		system('clear');
-		if ($next == "admin") {
+		// if ($next == "admin") {
 			echo "Please enter admin password.\n";
 			$pass = hash('sha256', trim(fgets(STDIN)));
 			if ($pass == "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8"){  //password
 				echo "Admin login successful!\n";
 				$menu = 69;
 			} else {
-				echo "Cannot login, did you forget your password?\nMaybe it was something like 'correct horse battery staple'.\n";
-			}
-		} else {
-			$menu = 1;
+				echo "Cannot login, did you forget your password?\nMaybe it was something like 'correct horse battery staple'.\nPress enter to try again or enter any text to return to the main menu.\n";
+				$next = trim(fgets(STDIN));
+				if ($next) $menu = 1;
 
-		}
+			}
+		// } else {
+		// 	$menu = 1;
+
+		// }
 		break;
 		
 		case '1': //main menu
 		system('clear');
 		echo str_pad("Main Menu", exec('tput cols'), "=", STR_PAD_BOTH);
-		echo "\nPlease type the number for the option you would like to choose:\n1. Get current vehicle list.\n2. Add vehicle to database.\n3. Check or update status of a vehicle.\n4. Check stock levels on all parts.\n5. Order a part.\n6. Show the most ordered parts.\n7. Exit.\n\n";
+		echo "\nPlease type the number for the option you would like to choose:\n1. Get current vehicle list.\n2. Add vehicle to database.\n3. Check or update status of a vehicle.\n4. Check stock levels on all parts.\n5. Order a part.\n6. Show the most ordered parts.\n7. Access admin menu.\n8. Exit.\n\n";
 		$next = trim(fgets(STDIN));
 		switch ($next) {
 			case '1':
 			system('clear');
-			echo $BSDB->getVehicles();
+			echo $BSDB->getVehicles(NULL);
 			echo "\nPlease press enter to return to the main menu.\n";
 			trim(fgets(STDIN));
 			break;
@@ -85,9 +88,9 @@ while ("Tuesday") {
 			$year = trim(fgets(STDIN));
 			if (strlen($year) != 4) $year = 'THE GAME';
 			while (!is_numeric($year)) {
-			echo "That was not a valid year, please enter a four digit integer for the year.\n";
-			$year = trim(fgets(STDIN));
-			if (strlen($year) != 4) $year = 'THE GAME';
+				echo "That was not a valid year, please enter a four digit integer for the year.\n";
+				$year = trim(fgets(STDIN));
+				if (strlen($year) != 4) $year = 'THE GAME';
 			}
 			echo "Please enter the vehicle's color.\n";
 			$color = trim(fgets(STDIN));
@@ -207,7 +210,13 @@ while ("Tuesday") {
 			echo "\nPlease press enter to return to the main menu.\n";
 			trim(fgets(STDIN));
 			break;
+
 			case '7':
+			$menu = 0;
+			break;
+
+
+			case '8':
 			goto VELOCIRAPTOR_ATTACK; //  https://xkcd.com/292/
 
 		}
@@ -216,8 +225,76 @@ while ("Tuesday") {
 		case '69':
 		system('clear');
 		echo str_pad("Admin Menu", exec('tput cols'), "|", STR_PAD_BOTH);
-		echo "\nPlease type the number for the option you would like to choose:\n1. Remove vehicle from database.\n2. Update part stock.\n\n";
+		echo "\nPlease type the number for the option you would like to choose:\n1. Remove customer from database.\n2. Update part stock.\n3. Return to main menu.\n\n";
 		$next = trim(fgets(STDIN));
+
+		switch ($next) {
+			case '1':
+			system('clear');
+			echo "Please enter the last name of the customer you would like to remove.\n\n";
+			$lname = trim(fgets(STDIN));
+			echo $BSDB->getVehicles($lname);
+			echo "If you would like to remove the entry listed above please type 'remove' otherwise press enter to return to the admin menu.\n\n";
+			$next = trim(fgets(STDIN));
+			if ($next == 'remove') {
+				$BSDB->removeVehicle($lname);
+				echo "Entry removed from database, please press enter to return to the admin menu.\n";
+				trim(fgets(STDIN));
+			}
+			break;
+			
+			case '2':
+			system('clear');
+			echo "Please choose the part you would update the stock level for.\n\n1. Front bumper.\n2. Rear bumper.\n3. Fender.\n4. Quarter panel.\n5. Hood.\n6. Front door.\n7. Rear door.\n8. Headlight.\n9. Taillight.\n\n";
+			
+			$part = trim(fgets(STDIN));
+			switch ($part) {
+				case '1':
+				$part = "Front Bumper";
+				break;
+				case '2':
+				$part = "Rear Bumper";
+				break;
+				case '3':
+				$part = "Fender";
+				break;
+				case '4':
+				$part = "Quarter Panel";
+				break;
+				case '5':
+				$part = "Hood";
+				break;
+				case '6':
+				$part = "Front Door";
+				break;
+				case '7':
+				$part = "Rear Door";
+				break;
+				case '8':
+				$part = "Headlight";
+				break;
+				case '9':
+				$part = "Taillight";
+				break;
+			}
+			
+			echo "What would you like to set the new stock level for ".$part."s?\n";
+			$amount = trim(fgets(STDIN));
+			if (!is_numeric($amount)) $amount = 'THE GAME';
+			while (!is_numeric($amount)) {
+				echo "That was not a number, please try again.\n";
+				$amount = trim(fgets(STDIN));
+				if (!is_numeric($amount)) $amount = 'THE GAME';
+			}
+			$BSDB->updatePartStock($part,$amount);
+			echo "Stock level updated successfully! Please press enter to return to the admin menu.\n";
+			trim(fgets(STDIN));
+			break;
+
+			case '3':
+			$menu = 1;
+			break;
+		}
 
 		break;
 	}
