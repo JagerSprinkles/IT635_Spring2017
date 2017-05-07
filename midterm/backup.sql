@@ -31,6 +31,7 @@ CREATE TABLE `vehicles` (
   `year` int(4) DEFAULT NULL,
   `color` varchar(255) DEFAULT NULL,
   `status` varchar(255) DEFAULT 'Needs estimate',
+  `notes` varchar(512) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -43,7 +44,7 @@ CREATE TABLE `vehicles` (
 
 LOCK TABLES `vehicles` WRITE;
 /*!40000 ALTER TABLE `vehicles` DISABLE KEYS */;
-INSERT INTO `vehicles` VALUES (1,'John','Smith','Subaru','BRZ',2015,'Blue','Waiting for parts'),(2,'Bob','Quest','Ford','F-150',2004,'Gray','In paint shop'),(3,'Lisa','Burger','Volkswagen','Beetle',1999,'Red','Needs estimate'),(4,'Sterling','Archer','Chevrolet','El Camino',1970,'Black','In detail shop'),(5,'Lana','Kane','Aston Martin','V8 Vantage',1970,'Purple','Waiting for authorization to begin repairs'),(6,'DJ','Kehoe','Bugatti','Veyron',2017,'Silver','Ready for customer pickup');
+INSERT INTO `vehicles` VALUES (1,'John','Smith','Subaru','BRZ',2015,'Blue','Waiting for parts',DEFAULT),(2,'Bob','Quest','Ford','F-150',2004,'Gray','In paint shop',DEFAULT),(3,'Lisa','Burger','Volkswagen','Beetle',1999,'Red','Needs estimate',DEFAULT),(4,'Sterling','Archer','Chevrolet','El Camino',1970,'Black','In detail shop',DEFAULT),(5,'Lana','Kane','Aston Martin','V8 Vantage',1970,'Purple','Waiting for authorization to begin repairs',DEFAULT),(6,'DJ','Kehoe','Bugatti','Veyron',2017,'Silver','Ready for customer pickup',DEFAULT);
 /*!40000 ALTER TABLE `vehicles` ENABLE KEYS */;
 UNLOCK TABLES;
 

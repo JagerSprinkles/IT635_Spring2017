@@ -32,19 +32,26 @@ class BodyShopAccess
 		if ($lname)
 			$response = "You have selected the entry for:\n";
 		else
-			$response = "Here is the current list of vehicles\nThey are listed by:\n".str_pad("First name",15)." | ".str_pad("Last name",15)." | ".str_pad("Make",15)." | ".str_pad("Model",15)." | Year | ".str_pad("Color",10)."\n";
-		while($row = $queryResponse->fetch_assoc()) $response .= str_pad($row['fname'], 15)." | ".str_pad($row['lname'],15)." | ".str_pad($row['make'],15)." | ".str_pad($row['model'],15)." | ".$row['year']." | ".str_pad($row['color'],10)."\n";
+			$response = "Here is the current list of vehicles\nThey are listed by:\n".str_pad("First name",15)." | ".str_pad("Last name",15)." | ".str_pad("Make",15)." | ".str_pad("Model",15)." | Year | ".str_pad("Color",10)." | Notes\n";
+		while($row = $queryResponse->fetch_assoc()) $response .= str_pad($row['fname'], 15)." | ".str_pad($row['lname'],15)." | ".str_pad($row['make'],15)." | ".str_pad($row['model'],15)." | ".$row['year']." | ".str_pad($row['color'],10)." | ".$row['notes']."\n";
 		return $response;
 
 	}
 
-	public function addVehicle($fname,$lname,$make,$model,$year,$color)
+	public function addVehicle($fname,$lname,$make,$model,$year,$color,$notes)
 	{
-		$query = "insert into vehicles values (NULL,'".$fname."','".$lname."','".$make."','".$model."','".$year."','".$color."',DEFAULT);";
+		$query = "insert into vehicles values (NULL,'".$fname."','".$lname."','".$make."','".$model."','".$year."','".$color."',DEFAULT,'".$notes."');";
 		$queryResponse = $this->db->query($query);
 	}
 
 	public function getVehicleStatus($lname)
+	{
+		$query = "select * from vehicles where `lname` = '".$lname."';";
+		$queryResponse = $this->db->query($query);
+		return $queryResponse->fetch_array(MYSQLI_ASSOC);
+	}
+
+	public function getVehicleNotes($lname)
 	{
 		$query = "select * from vehicles where `lname` = '".$lname."';";
 		$queryResponse = $this->db->query($query);
@@ -58,6 +65,12 @@ class BodyShopAccess
 		return $queryResponse;
 	}
 
+	public function setVehicleNotes($lname, $notes)
+	{
+		$query = "update vehicles set notes = '".$notes."' where lname = '".$lname."';";
+		$queryResponse = $this->db->query($query);
+		return $queryResponse;
+	}
 	public function getPartStock($col)
 	{
 		$query = "select part,stock from parts;";

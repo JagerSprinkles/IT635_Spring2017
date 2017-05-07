@@ -9,22 +9,22 @@ $q = 113;
 $col = exec('tput cols');
 
 
-if ($col < 120) $x = 150; else $x = $col;
+// if ($col < 120) $x = 150; else $x = $col;
 
-for ($x; $x >= 0 ; $x--) { 
+// for ($x; $x >= 0 ; $x--) { 
 
-	$banner = substr("Welcome to the Übertastic Auto Body Car and Part Tracker Thingy, or ÜABCPTT! \nPress CTRL+c to exit at any time.\n\n", $q);
-	if ($q > 0) $q--;
-	$space = "";
-	for ($y = $col - $q; $y > 0 ; $y--) { 
-		$space .= " ";
+// 	$banner = substr("Welcome to the Übertastic Auto Body Vehicle and Part Tracker Thingy, or ÜABVPTT! \nPress CTRL+c to exit at any time.\n\n", $q);
+// 	if ($q > 0) $q--;
+// 	$space = "";
+// 	for ($y = $col - $q; $y > 0 ; $y--) { 
+// 		$space .= " ";
 
-	}
-	system('clear');
-	if ($x < 37) $space = "";
-	echo $space.$banner;
-	usleep(25000);
-}
+// 	}
+// 	system('clear');
+// 	if ($x < 37) $space = "";
+// 	echo $space.$banner;
+// 	usleep(25000);
+// }
 
 
 system('clear');
@@ -33,7 +33,7 @@ $pad = "";
 for ($i=0; $i < exec('tput cols'); $i++) { 
 	$pad .= "-=";
 }
-echo "Welcome to the Übertastic Auto Body Car and Part Tracker Thingy, or ÜABCPTT! \nPress CTRL+c to exit at any time.\nPlease press enter to get started!\n\n";
+echo "Welcome to the Übertastic Auto Body Vehicle and Part Tracker Thingy, or ÜABVPTT! \nPress CTRL+c to exit at any time.\nPlease press enter to get started!\n\n";
 trim(fgets(STDIN));
 $BSDB = new BodyShopAccess();
 $menu = 1;
@@ -42,31 +42,26 @@ while ("Tuesday") {
 	switch ($menu) {
 		case '0': // first menu, login
 		
-		// echo "Type 'admin' to login to the admin account or press enter to access the main menu.\n\n";
-		// $next = trim(fgets(STDIN));
 		system('clear');
-		// if ($next == "admin") {
+		
 		echo "Please enter admin password.\n";
 		$pass = hash('sha256', trim(fgets(STDIN)));
+		system('clear');
 			if ($pass == "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8"){  //password
 				echo "Admin login successful!\n";
 				$menu = 69;
 			} else {
-				echo "Cannot login, did you forget your password?\nMaybe it was something like 'correct horse battery staple'.\nPress enter to try again or enter any text to return to the main menu.\n";
+				echo "Cannot login, did you forget your password?\nMaybe it was something like 'correct horse battery staple'?\nPress enter to try again or enter any text to return to the main menu.\n";
 				$next = trim(fgets(STDIN));
 				if ($next) $menu = 1;
 
 			}
-		// } else {
-		// 	$menu = 1;
-
-		// }
 			break;
 
 		case '1': //main menu
 		system('clear');
 		echo str_pad("Main Menu", exec('tput cols'), "=", STR_PAD_BOTH);
-		echo "\nPlease type the number for the option you would like to choose:\n1. Get current vehicle list.\n2. Add vehicle to database.\n3. Check or update status of a vehicle.\n4. Check stock levels on all parts.\n5. Order a part.\n6. Show the most ordered parts.\n7. Access admin menu.\n8. Exit.\n\n";
+		echo "\nPlease type the number for the option you would like to choose:\n1. Get current vehicle list.\n2. Add vehicle to database.\n3. Check or update status of a vehicle.\n4. Check or update the notes on a vehicle.\n5. Check stock levels on all parts.\n6. Order a part.\n7. Show the most ordered parts.\n8. Access admin menu.\n9. Exit.\n\n";
 		$next = trim(fgets(STDIN));
 		switch ($next) {
 			case '1':
@@ -95,7 +90,11 @@ while ("Tuesday") {
 			}
 			echo "Please enter the vehicle's color.\n";
 			$color = trim(fgets(STDIN));
-			$BSDB->addVehicle($fname,$lname,$make,$model,$year,$color);
+
+			echo "Please enter any notes about the vehicle.\n";
+			$notes = trim(fgets(STDIN));
+
+			$BSDB->addVehicle($fname,$lname,$make,$model,$year,$color,$notes);
 			echo "\n".$fname." ".$lname."'s vehicle has been added to the database.\n\n";
 			echo "Please press enter to return to the main menu.\n";
 			trim(fgets(STDIN));
@@ -149,14 +148,47 @@ while ("Tuesday") {
 			trim(fgets(STDIN));
 			break;
 
-			case '4': //Check stock levels on all parts
+
+			case '4': //Check or update notes of a vehicle
+			system('clear');
+			echo "Please enter the customer's last name to select their vehicle\n";
+			$lname = trim(fgets(STDIN));
+			
+			$result = $BSDB->getVehicleNotes($lname);
+			system('clear');
+			if ($result['fname']){
+				echo $result['fname']." ".$result['lname']."'s vehicle's notes are currently '".$result['notes']."'.\nIf you would like to update the notes please type 'update', otherwise press enter to return to the main menu\n\n"; 
+				$next = trim(fgets(STDIN));
+				if ($next == "update"){
+					system('clear');
+					echo "Please enter the new notes for the vehicle, any existing notes will be overwritten.\n\n";
+					$notes = trim(fgets(STDIN));
+					$BSDB->setVehicleNotes($lname,$notes);
+
+					system('clear');
+					$result = $BSDB->getVehicleNotes($lname);
+					echo $result['fname']." ".$result['lname']."'s vehicle's notes have been updated to '".$result['notes']."'.\n\n";
+					echo "Please press enter to return to the main menu.\n";
+					
+				}else break;
+			}
+			else echo "Customer '".$lname."' not found, please press enter to return to the main menu.\n\n";
+			trim(fgets(STDIN));
+			break;
+
+
+
+
+
+
+			case '5': //Check stock levels on all parts
 			system('clear');
 			echo $BSDB->getPartStock(exec('tput cols'))."\nPlease press enter to return to the main menu.\n";
 			trim(fgets(STDIN));
 			break;
 
 
-			case '5': //Order a part
+			case '6': //Order a part
 			system('clear');
 			echo "Please choose the part you would like to order.\nInstant delivery is guaranteed!\n\n1. Front bumper.\n2. Rear bumper.\n3. Fender.\n4. Quarter panel.\n5. Hood.\n6. Front door.\n7. Rear door.\n8. Headlight.\n9. Taillight.\n\n";
 			$next = trim(fgets(STDIN));
@@ -205,19 +237,19 @@ while ("Tuesday") {
 			trim(fgets(STDIN));
 			
 			break;
-			case '6': //Show the most ordered parts
+			case '7': //Show the most ordered parts
 			system('clear');
 			echo $BSDB->getMostOrdered(exec('tput cols'));
 			echo "\nPlease press enter to return to the main menu.\n";
 			trim(fgets(STDIN));
 			break;
 
-			case '7':
+			case '8':
 			$menu = 0;
 			break;
 
 
-			case '8':
+			case '9':
 			goto VELOCIRAPTOR_ATTACK; //  https://xkcd.com/292/
 
 		}
