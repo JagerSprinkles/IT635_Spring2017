@@ -36,7 +36,7 @@ for ($i=0; $i < exec('tput cols'); $i++) {
 echo "Welcome to the Übertastic Auto Body Vehicle and Part Tracker Thingy, or ÜABVPTT! \nPress CTRL+c to exit at any time.\nPlease press enter to get started!\n\n";
 trim(fgets(STDIN));
 $BSDB = new BodyShopAccess();
-$menu = 1;
+$menu = 11;
 while ("Tuesday") {
 
 	switch ($menu) {
@@ -251,9 +251,64 @@ while ("Tuesday") {
 
 			case '9':
 			goto VELOCIRAPTOR_ATTACK; //  https://xkcd.com/292/
+			break;
+
+
 
 		}
 		break;
+
+
+
+			case '11':
+			trim(fgets(STDIN));
+			system('clear');
+			echo "Please select the part to see what vehicles it was installed on:\n\n1. Front bumper.\n2. Rear bumper.\n3. Fender.\n4. Quarter panel.\n5. Hood.\n6. Front door.\n7. Rear door.\n8. Headlight.\n9. Taillight.\n\n";
+			$next = trim(fgets(STDIN));
+			$part = "";
+			switch ($next) {
+				case '1':
+				$part = "Front Bumper";
+				break;
+				case '2':
+				$part = "Rear Bumper";
+				break;
+				case '3':
+				$part = "Fender";
+				break;
+				case '4':
+				$part = "Quarter Panel";
+				break;
+				case '5':
+				$part = "Hood";
+				break;
+				case '6':
+				$part = "Front Door";
+				break;
+				case '7':
+				$part = "Rear Door";
+				break;
+				case '8':
+				$part = "Headlight";
+				break;
+				case '9':
+				$part = "Taillight";
+				break;
+			}
+
+			$out = $BSDB->getPartsInstalled($part);
+			system('clear');
+			echo $out;
+			echo "\n\nPlease press enter to return to the admin menu.\n";
+			trim(fgets(STDIN));
+			break;
+
+
+
+
+
+
+
 
 		case '69':
 		system('clear');

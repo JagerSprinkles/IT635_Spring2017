@@ -134,7 +134,45 @@ class BodyShopAccess
 		$queryResponse = $this->db->query($query);
 	}
 
+	public function getPartsInstalled($part)
+	{
+		try
+		{
+			$mdb = new MongoDB\Driver\Manager("mongodb://towel:thegame@ds163718.mlab.com:63718/it_635");	
+			$command = new MongoDB\Driver\Command(['ping' => 1]);
+			$mdb->executeCommand('db', $command);
+			$servers = $mdb->getServers();
+				//print_r($servers);
+			$filter = array('part'=>$part);
+			$query = new MongoDB\Driver\Query($filter);
+			$results = $mdb->executeQuery("it_635.auto_body",$query);
+				//print_r($results->toArray());
+			$out = $results->toArray();
 
+			$data = (get_object_vars($out['0']));
+
+			$query = "select * from vehicles;";
+			$queryResponse = $this->db->query($query);
+
+			$x='';
+			while($row = $queryResponse->fetch_assoc() )
+			{
+
+				if(array_key_exists($row['id'], $data))
+				{
+					$query2 = "select * from vehicles where id = '".$row['id']."';";
+					$queryResponse2 = $this->db->query($query2);
+					$vehicle = $queryResponse2->fetch_assoc();
+					$x.="A ".$part." was installed on ".$row['lname']."'s vehicle on ".$data[$row['id']].".\n";
+				}
+			}
+			return $x;
+		}
+		catch(exception $e)
+		{
+			print_r($e);
+		}
+	}
 
 }
 ?>
