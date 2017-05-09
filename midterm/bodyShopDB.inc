@@ -138,11 +138,7 @@ class BodyShopAccess
 	{
 		try
 		{
-			$mdb = new MongoDB\Driver\Manager("mongodb://towel:thegame@ds163718.mlab.com:63718/it_635");	
-			$command = new MongoDB\Driver\Command(['ping' => 1]);
-			$mdb->executeCommand('db', $command);
-			$servers = $mdb->getServers();
-				//print_r($servers);
+			$mdb = new MongoDB\Driver\Manager("mongodb://towel:thegame@ds163718.mlab.com:63718/it_635");
 			$filter = array('part'=>$part);
 			$query = new MongoDB\Driver\Query($filter);
 			$results = $mdb->executeQuery("it_635.auto_body",$query);
@@ -174,6 +170,39 @@ class BodyShopAccess
 		}
 	}
 
+
+	public function installPart($lname,$part,$date)
+	{
+		$query = "select * from vehicles where lname = '".$lname."';";
+		$queryResponse = $this->db->query($query);
+		$vehicle = $queryResponse->fetch_assoc();
+		try
+		{
+			$mdb = new MongoDB\Driver\Manager("mongodb://towel:thegame@ds163718.mlab.com:63718/it_635");
+			$bulk = new MongoDB\Driver\BulkWrite();
+			$bulk->update(
+				['part' => $part],
+				['$set' => [$vehicle['id'] => $date]],
+				['multi' => false, 'upsert' => false]
+				);
+			$writeConcern = new MongoDB\Driver\WriteConcern(MongoDB\Driver\WriteConcern::MAJORITY, 1000);
+			$result = $mdb->executeBulkWrite('it_635.auto_body', $bulk, $writeConcern);
+			echo "Update success!\n";
+			echo "Please press enter to return to the main menu.\n";
+
+
+
+
+		}
+		catch(exception $e)
+		{
+			echo "ERROR!!! You typed something wrong!\n";
+			echo "Please press enter to return to the main menu.\n";
+			
+			//print_r($e);
+		}
+
+	}
 }
 ?>
 

@@ -36,7 +36,7 @@ for ($i=0; $i < exec('tput cols'); $i++) {
 echo "Welcome to the Übertastic Auto Body Vehicle and Part Tracker Thingy, or ÜABVPTT! \nPress CTRL+c to exit at any time.\nPlease press enter to get started!\n\n";
 trim(fgets(STDIN));
 $BSDB = new BodyShopAccess();
-$menu = 11;
+$menu = 1;
 while ("Tuesday") {
 
 	switch ($menu) {
@@ -61,7 +61,7 @@ while ("Tuesday") {
 		case '1': //main menu
 		system('clear');
 		echo str_pad("Main Menu", exec('tput cols'), "=", STR_PAD_BOTH);
-		echo "\nPlease type the number for the option you would like to choose:\n1. Get current vehicle list.\n2. Add vehicle to database.\n3. Check or update status of a vehicle.\n4. Check or update the notes on a vehicle.\n5. Check stock levels on all parts.\n6. Order a part.\n7. Show the most ordered parts.\n8. Access admin menu.\n9. Exit.\n\n";
+		echo "\nPlease type the number for the option you would like to choose:\n1. Get current vehicle list.\n2. Add vehicle to database.\n3. Check or update status of a vehicle.\n4. Check or update the notes on a vehicle.\n5. Check stock levels on all parts.\n6. Order a part.\n7. Show the most ordered parts.\n8. Check which parts were installed on what vehicles.\n9. Enter the date when a part was installed on a vehicle.\n10. Access admin menu.\n11. Exit.\n\n";
 		$next = trim(fgets(STDIN));
 		switch ($next) {
 			case '1':
@@ -245,23 +245,6 @@ while ("Tuesday") {
 			break;
 
 			case '8':
-			$menu = 0;
-			break;
-
-
-			case '9':
-			goto VELOCIRAPTOR_ATTACK; //  https://xkcd.com/292/
-			break;
-
-
-
-		}
-		break;
-
-
-
-			case '11':
-			trim(fgets(STDIN));
 			system('clear');
 			echo "Please select the part to see what vehicles it was installed on:\n\n1. Front bumper.\n2. Rear bumper.\n3. Fender.\n4. Quarter panel.\n5. Hood.\n6. Front door.\n7. Rear door.\n8. Headlight.\n9. Taillight.\n\n";
 			$next = trim(fgets(STDIN));
@@ -299,9 +282,72 @@ while ("Tuesday") {
 			$out = $BSDB->getPartsInstalled($part);
 			system('clear');
 			echo $out;
-			echo "\n\nPlease press enter to return to the admin menu.\n";
+			echo "\n\nPlease press enter to return to the main menu.\n";
 			trim(fgets(STDIN));
 			break;
+
+			case '9':
+			system('clear');
+			echo "Please enter the customer's last name to select their vehicle\n";
+			$lname = trim(fgets(STDIN));
+			system('clear');
+			echo "Please select the part to enter the date it was installed on the vehicle:\n\n1. Front bumper.\n2. Rear bumper.\n3. Fender.\n4. Quarter panel.\n5. Hood.\n6. Front door.\n7. Rear door.\n8. Headlight.\n9. Taillight.\n\n";
+			$next = trim(fgets(STDIN));
+			$part = "";
+			switch ($next) {
+				case '1':
+				$part = "Front Bumper";
+				break;
+				case '2':
+				$part = "Rear Bumper";
+				break;
+				case '3':
+				$part = "Fender";
+				break;
+				case '4':
+				$part = "Quarter Panel";
+				break;
+				case '5':
+				$part = "Hood";
+				break;
+				case '6':
+				$part = "Front Door";
+				break;
+				case '7':
+				$part = "Rear Door";
+				break;
+				case '8':
+				$part = "Headlight";
+				break;
+				case '9':
+				$part = "Taillight";
+				break;
+			}
+			system('clear');
+			echo "Please enter the date the part was installed\n";
+			$date = trim(fgets(STDIN));
+			$BSDB->installPart($lname,$part,$date);
+			trim(fgets(STDIN));
+
+			break;
+
+			case '10':
+			$menu = 0;
+			break;
+
+
+			case '11':
+			goto VELOCIRAPTOR_ATTACK; //  https://xkcd.com/292/
+			break;
+
+
+
+		}
+		break;
+
+
+
+
 
 
 
