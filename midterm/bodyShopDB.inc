@@ -186,7 +186,9 @@ class BodyShopAccess
 				['multi' => false, 'upsert' => false]
 				);
 			$writeConcern = new MongoDB\Driver\WriteConcern(MongoDB\Driver\WriteConcern::MAJORITY, 1000);
-			$result = $mdb->executeBulkWrite('it_635.auto_body', $bulk, $writeConcern);
+			$mdb->executeBulkWrite('it_635.auto_body', $bulk, $writeConcern);
+			system('clear');
+
 			echo "Update success!\n";
 			echo "Please press enter to return to the main menu.\n";
 
@@ -198,7 +200,7 @@ class BodyShopAccess
 		{
 			echo "ERROR!!! You typed something wrong!\n";
 			echo "Please press enter to return to the main menu.\n";
-			
+
 			//print_r($e);
 		}
 
