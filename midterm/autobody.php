@@ -9,22 +9,22 @@ $q = 113;
 $col = exec('tput cols');
 
 
-// if ($col < 120) $x = 150; else $x = $col;
+if ($col < 120) $x = 150; else $x = $col;
 
-// for ($x; $x >= 0 ; $x--) { 
+for ($x; $x >= 0 ; $x--) { 
 
-// 	$banner = substr("Welcome to the Übertastic Auto Body Vehicle and Part Tracker Thingy, or ÜABVPTT! \nPress CTRL+c to exit at any time.\n\n", $q);
-// 	if ($q > 0) $q--;
-// 	$space = "";
-// 	for ($y = $col - $q; $y > 0 ; $y--) { 
-// 		$space .= " ";
+	$banner = substr("Welcome to the Übertastic Auto Body Vehicle and Part Tracker Thingy, or ÜABVPTT! \nPress CTRL+c to exit at any time.\n\n", $q);
+	if ($q > 0) $q--;
+	$space = "";
+	for ($y = $col - $q; $y > 0 ; $y--) { 
+		$space .= " ";
 
-// 	}
-// 	system('clear');
-// 	if ($x < 37) $space = "";
-// 	echo $space.$banner;
-// 	usleep(25000);
-// }
+	}
+	system('clear');
+	if ($x < 37) $space = "";
+	echo $space.$banner;
+	usleep(25000);
+}
 
 
 system('clear');
